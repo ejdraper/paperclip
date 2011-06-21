@@ -133,13 +133,6 @@ class InterpolationsTest < Test::Unit::TestCase
     assert_equal seconds_since_epoch, Paperclip::Interpolations.updated_at(attachment, :style)
   end
 
-  should "return hash" do
-    attachment = mock
-    fake_hash = "a_wicked_secure_hash"
-    attachment.expects(:hash).returns(fake_hash)
-    assert_equal fake_hash, Paperclip::Interpolations.hash(attachment, :style)
-  end
-
   should "call all expected interpolations with the given arguments" do
     Paperclip::Interpolations.expects(:id).with(:attachment, :style).returns(1234)
     Paperclip::Interpolations.expects(:attachment).with(:attachment, :style).returns("attachments")

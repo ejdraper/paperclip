@@ -131,49 +131,6 @@ class AttachmentTest < Test::Unit::TestCase
     end
   end
 
-  context "An attachment with :hash interpolations" do
-    setup do
-      @file = StringIO.new("...")
-    end
-
-    should "raise if no secret is provided" do
-      @attachment = attachment :path => ":hash"
-      @attachment.assign @file
-
-      assert_raise ArgumentError do
-        @attachment.path
-      end
-    end
-
-    context "when secret is set" do
-      setup do
-        @attachment = attachment :path => ":hash", :hash_secret => "w00t"
-        @attachment.stubs(:instance_read).with(:updated_at).returns(Time.at(1234567890))
-        @attachment.stubs(:instance_read).with(:file_name).returns("bla.txt")
-        @attachment.instance.id = 1234
-        @attachment.assign @file
-      end
-
-      should "interpolate the hash data" do
-        @attachment.expects(:interpolate).with(@attachment.options[:hash_data],anything).returns("interpolated_stuff")
-        @attachment.hash
-      end
-
-      should "result in the correct interpolation" do
-        assert_equal "fake_models/avatars/1234/original/1234567890", @attachment.send(:interpolate,@attachment.options[:hash_data])
-      end
-
-      should "result in a correct hash" do
-        assert_equal "d22b617d1bf10016aa7d046d16427ae203f39fce", @attachment.path
-      end
-
-      should "generate a hash digest with the correct style" do
-        OpenSSL::HMAC.expects(:hexdigest).with(anything, anything, "fake_models/avatars/1234/medium/1234567890")
-        @attachment.path("medium")
-      end
-    end
-  end
-
   context "An attachment with a :rails_env interpolation" do
     setup do
       @rails_env = "blah"

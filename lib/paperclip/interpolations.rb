@@ -104,12 +104,6 @@ module Paperclip
       attachment.fingerprint
     end
 
-    # Returns a the attachment hash.  See Paperclip::Attachment#hash for
-    # more details.
-    def hash attachment, style_name
-      attachment.hash(style_name)
-    end
-
     # Returns the id of the instance in a split path form. e.g. returns
     # 000/001/234 for an id of 1234.
     def id_partition attachment, style_name
